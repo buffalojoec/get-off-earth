@@ -20,4 +20,4 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: get_off_earth
     volumes:
-        - ./get_off_earth/schema.sql:/docker-entrypoint-initdb.d/up.sql
+        - ./get_off_earth/up.sql:/docker-entrypoint-initdb.d/up.sql

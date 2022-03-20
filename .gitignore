@@ -1,4 +1,5 @@
 get_off_earth/__pycache__/
 get_off_earth.egg-info/
-venv/
+planets.txt
 test.py
+venv/
