@@ -1,3 +1,4 @@
-get_off_earth/__py_cache__/
+get_off_earth/__pycache__/
+get_off_earth.egg-info/
 venv/
 test.py
