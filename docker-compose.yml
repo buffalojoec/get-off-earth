@@ -1,0 +1,23 @@
+version: '2.3'
+
+services:
+  get-off-earth:
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      DATABASE_URL: postgres://postgres:pass@postgres-docker/get_off_earth
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14.2
+    hostname: postgres-docker
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: get_off_earth
+    volumes:
+        - ./get_off_earth/schema.sql:/docker-entrypoint-initdb.d/up.sql
