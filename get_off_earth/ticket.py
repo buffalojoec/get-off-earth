@@ -23,8 +23,8 @@ class Ticket:
         self.ship_name = ship_name
         self.ship_type_id = ship_type_id
         self.ship_tye_model_name = ship_tye_model_name
-        self.trip_time = trip_time
-        self.trip_danger = trip_danger
+        self.trip_time = trip_time # Years
+        self.trip_danger = trip_danger # High, Medium, Low
         self.name = name
         self.pod_quantity = pod_quantity # How many beds?
 

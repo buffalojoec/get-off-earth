@@ -21,8 +21,8 @@ class Ship:
         self.distance = distance # Light-years
         self.ship_type_id = ship_type_id
         self.ship_tye_model_name = ship_tye_model_name
-        self.trip_time = trip_time
-        self.trip_danger = trip_danger
+        self.trip_time = trip_time # Years
+        self.trip_danger = trip_danger # High, Medium, Low
         self.max_capacity = max_capacity
         self.passengers = passengers
 
@@ -40,8 +40,8 @@ class ShipDAO:
         self.name = name
         self.planet_id = planet_id
         self.ship_type_id = ship_type_id
-        self.trip_time = trip_time
-        self.trip_danger = trip_danger
+        self.trip_time = trip_time # Years
+        self.trip_danger = trip_danger # High, Medium, Low
         self.max_capacity = max_capacity
 
 
