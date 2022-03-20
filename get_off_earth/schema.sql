@@ -4,8 +4,8 @@ INSERT INTO planets
 ) 
 VALUES
 (
-    (1, "Gargamon", 20),
-    (2, "Mustafar", 500),
+    (1, "Nibiru", 20),
+    (2, "Kepler-22b", 500),
     (3, "Tatooine", 600),
     (4, "Nabu", 1200),
     (5, "Titan III", 2700)
