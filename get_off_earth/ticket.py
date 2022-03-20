@@ -39,3 +39,26 @@ class TicketDAO:
         self.ship_id = ship_id
         self.name = name
         self.pod_quantity = pod_quantity # How many beds?
+
+
+@app.route('/tickets')
+def list_all_tickets():
+        """
+        List all tickets on the travel manifest.
+        """
+        return ''
+
+@app.route('/tickets/{id}')
+def get_ticket_by_id(id):
+        """
+        Get a specific ticket by ID.
+        """
+        return ''
+
+## POST
+@app.route('/tickets')
+def add_new_ticket(ticket):
+        """
+        Buy a ticket to a ship. You're one of the lucky ones.
+        """
+        return ''
