@@ -76,6 +76,7 @@ def list_all_ship_types():
         """
         return ''
 
+## POST
 @app.route('/shipTypes')
 def publish_new_ship_type():
         """
@@ -83,6 +84,7 @@ def publish_new_ship_type():
         """
         return ''
 
+## POST
 @app.route('/ships')
 def build_new_ship():
         """
