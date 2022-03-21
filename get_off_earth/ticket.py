@@ -1,4 +1,4 @@
-
+from flask import Blueprint
 
 
 class Ticket:
@@ -41,24 +41,27 @@ class TicketDAO:
         self.pod_quantity = pod_quantity # How many beds?
 
 
-@app.route('/tickets')
+ticket_controller = Blueprint('ticket_controller', __name__)
+
+
+@ticket_controller.route('/tickets')
 def list_all_tickets():
         """
         List all tickets on the travel manifest.
         """
-        return ''
+        return "Test"
 
-@app.route('/tickets/{id}')
+@ticket_controller.route('/tickets/<id>')
 def get_ticket_by_id(id):
         """
         Get a specific ticket by ID.
         """
-        return ''
+        return "Test"
 
 ## POST
-@app.route('/tickets')
+@ticket_controller.route('/tickets')
 def add_new_ticket(ticket):
         """
         Buy a ticket to a ship. You're one of the lucky ones.
         """
-        return ''
+        return "Test"

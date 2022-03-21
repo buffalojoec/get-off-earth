@@ -1,4 +1,4 @@
-
+from flask import Blueprint
 
 
 class Ship:
@@ -55,40 +55,43 @@ class ShipType:
         self.max_capacity = max_capacity
 
 
-@app.route('/ships')
+ship_controller = Blueprint('ship_controller', __name__)
+
+
+@ship_controller.route('/ships')
 def list_all_ships():
         """
         List all ships on the travel manifest.
         """
-        return ''
+        return "Test"
 
-@app.route('/ships/{id}')
+@ship_controller.route('/ships/<id>')
 def get_ship_by_id(id):
         """
         Get a specific ship by ID.
         """
-        return ''
+        return "Test"
 
-@app.route('/shipTypes')
+@ship_controller.route('/shipTypes')
 def list_all_ship_types():
         """
         List all ship types in the engineering blueprints.
         """
-        return ''
+        return "Test"
 
 ## POST
-@app.route('/shipTypes')
+@ship_controller.route('/shipTypes')
 def publish_new_ship_type():
         """
         Design a new ship type. I hope you know what you're doing.
         """
-        return ''
+        return "Test"
 
 ## POST
-@app.route('/ships')
+@ship_controller.route('/ships')
 def build_new_ship():
         """
         Man your own ship. God speed.
         """
-        return ''
+        return "Test"
 
