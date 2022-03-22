@@ -1,4 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from .db import select_from_db, insert_one
+import json
 
 
 class Ticket:
@@ -41,27 +43,53 @@ class TicketDAO:
         self.pod_quantity = pod_quantity # How many beds?
 
 
+def to_ticket(record): 
+        return TicketDAO(
+                record[0], 
+                record[1], 
+                record[2],
+                record[3]
+        ).__dict__
+
+
+
 ticket_controller = Blueprint('ticket_controller', __name__)
 
 
-@ticket_controller.route('/tickets')
-def list_all_tickets():
-        """
-        List all tickets on the travel manifest.
-        """
-        return "Test"
+@ticket_controller.route('/tickets', methods = ['GET', 'POST'])
+def tickets():
+        if request.method == 'GET':
+                """
+                List all tickets on the travel manifest.
+                """
+                return json.dumps(list(map(
+                                to_ticket, 
+                                select_from_db("SELECT * FROM tickets")
+                        )))
+        if request.method == 'POST':
+                """
+                Buy a ticket to a ship. You're one of the lucky ones.
+                """
+                new_ticket = TicketDAO(
+                        None,
+                        request.json['ship_id'],
+                        request.json['name'],
+                        request.json['pod_quantity']
+                )
+                insert_one("tickets", (
+                        new_ticket.ship_id,
+                        new_ticket.name,
+                        new_ticket.pod_quantity
+                ))
+                return json.dumps(new_ticket.__dict__)
+
 
 @ticket_controller.route('/tickets/<id>')
 def get_ticket_by_id(id):
         """
         Get a specific ticket by ID.
         """
-        return "Test"
-
-## POST
-@ticket_controller.route('/tickets')
-def add_new_ticket(ticket):
-        """
-        Buy a ticket to a ship. You're one of the lucky ones.
-        """
-        return "Test"
+        return json.dumps(
+                        to_ticket(
+                        select_from_db(f"SELECT * FROM tickets WHERE id={id}")[0]
+        ))

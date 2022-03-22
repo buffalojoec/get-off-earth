@@ -1,4 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from .db import select_from_db, insert_one
+import json
 
 
 class Ship:
@@ -55,43 +57,96 @@ class ShipType:
         self.max_capacity = max_capacity
 
 
+def to_ship(record): 
+        return ShipDAO(
+                record[0], 
+                record[1], 
+                record[2],
+                record[3],
+                record[4],
+                record[5]
+        ).__dict__
+
+
+def to_ship_type(record): 
+        return ShipType(
+                record[0], 
+                record[1], 
+                record[2],
+                record[3]
+        ).__dict__
+
+
+
 ship_controller = Blueprint('ship_controller', __name__)
 
 
-@ship_controller.route('/ships')
-def list_all_ships():
-        """
-        List all ships on the travel manifest.
-        """
-        return "Test"
+@ship_controller.route('/ships', methods = ['GET', 'POST'])
+def ships():
+        if request.method == 'GET':
+                """
+                List all ships on the travel manifest.
+                """
+                return json.dumps(list(map(
+                                to_ship, 
+                                select_from_db("SELECT * FROM ships")
+                        )))
+        if request.method == 'POST':
+                """
+                Man your own ship. God speed.
+                """
+                new_ship = ShipDAO(
+                        None,
+                        request.json['planet_id'],
+                        request.json['ship_type_id'],
+                        request.json['name'],
+                        request.json['trip_time'],
+                        request.json['trip_danger']
+                )
+                insert_one("ships", (
+                        new_ship.planet_id,
+                        new_ship.ship_type_id,
+                        new_ship.name,
+                        new_ship.trip_time,
+                        new_ship.trip_danger
+                ))
+                return json.dumps(new_ship.__dict__)
+
 
 @ship_controller.route('/ships/<id>')
-def get_ship_by_id(id):
+def ship_by_id(id):
         """
         Get a specific ship by ID.
         """
-        return "Test"
+        return json.dumps(
+                        to_ship(
+                        select_from_db(f"SELECT * FROM ships WHERE id={id}")[0]
+        ))
 
-@ship_controller.route('/shipTypes')
-def list_all_ship_types():
-        """
-        List all ship types in the engineering blueprints.
-        """
-        return "Test"
 
-## POST
-@ship_controller.route('/shipTypes')
-def publish_new_ship_type():
-        """
-        Design a new ship type. I hope you know what you're doing.
-        """
-        return "Test"
-
-## POST
-@ship_controller.route('/ships')
-def build_new_ship():
-        """
-        Man your own ship. God speed.
-        """
-        return "Test"
-
+@ship_controller.route('/shipTypes', methods = ['GET', 'POST'])
+def ship_types():
+        if request.method == 'GET':
+                """
+                List all ship types in the engineering blueprints.
+                """
+                return json.dumps(list(map(
+                                to_ship_type, 
+                                select_from_db("SELECT * FROM ship_types")
+                        )))
+        if request.method == 'POST':
+                """
+                Design a new ship type. I hope you know what you're doing.
+                """
+                new_ship_type = ShipType(
+                        None,
+                        request.json['model_name'],
+                        request.json['hyperspeed_rating'],
+                        request.json['max_capacity']
+                )
+                insert_one("ship_types", (
+                        new_ship_type.model_name,
+                        new_ship_type.hyperspeed_rating,
+                        new_ship_type.max_capacity
+                ))
+                return json.dumps(new_ship_type.__dict__)
