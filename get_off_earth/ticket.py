@@ -18,13 +18,13 @@ class Ticket:
                 name, 
                 pod_quantity):
         self.id = id
-        self.planet_id = planet_id
-        self.planet_name = planet_name
-        self.distance = distance # Light-years
         self.ship_id = ship_id
         self.ship_name = ship_name
         self.ship_type_id = ship_type_id
         self.ship_tye_model_name = ship_tye_model_name
+        self.planet_id = planet_id
+        self.planet_name = planet_name
+        self.distance = distance # Light-years
         self.trip_time = trip_time # Years
         self.trip_danger = trip_danger # High, Medium, Low
         self.name = name
@@ -44,16 +44,35 @@ class TicketDAO:
 
 
 def to_ticket(record): 
-        return TicketDAO(
-                record[0], 
-                record[1], 
-                record[2],
-                record[3]
+        return Ticket(
+                id = record[0], 
+                ship_id = record[1], 
+                ship_name = record[2],
+                ship_type_id = record[3],
+                ship_tye_model_name = record[4],
+                planet_id = record[5],
+                planet_name = record[6],
+                distance = record[7],
+                trip_time = record[8],
+                trip_danger = record[9],
+                name = record[10],
+                pod_quantity = record[11]
         ).__dict__
 
 
 
 ticket_controller = Blueprint('ticket_controller', __name__)
+
+
+def select_all_tickets_sql(where_statement):
+        return "SELECT t1.id, t1.ship_id, t2.name, t2.ship_type_id, t3.model_name, " \
+                + "t2.planet_id, t4.name, t4.distance, t2.trip_time, t2.trip_danger, " \
+                + "t1.name, t1.pod_quantity FROM tickets t1 INNER JOIN ships t2 " \
+                + "ON t1.ship_id = t2.id INNER JOIN ship_types t3 ON t2.ship_type_id = t3.id " \
+                + f"INNER JOIN planets t4 ON t2.planet_id = t4.id {where_statement} " \
+                + "GROUP BY t1.id, t2.name, t2.ship_type_id, t3.model_name, t2.planet_id, " \
+                + "t4.name, t4.distance, t2.trip_time, t2.trip_danger " \
+                + "ORDER BY t1.id ASC"
 
 
 @ticket_controller.route('/tickets', methods = ['GET', 'POST'])
@@ -64,7 +83,9 @@ def tickets():
                 """
                 return json.dumps(list(map(
                                 to_ticket, 
-                                select_from_db("SELECT * FROM tickets")
+                                select_from_db(
+                                        select_all_tickets_sql("")
+                                )
                         )))
         if request.method == 'POST':
                 """
@@ -91,5 +112,7 @@ def get_ticket_by_id(id):
         """
         return json.dumps(
                         to_ticket(
-                        select_from_db(f"SELECT * FROM tickets WHERE id={id}")[0]
+                        select_from_db(
+                                select_all_tickets_sql(f"WHERE t1.id = {id}")
+                        )[0]
         ))

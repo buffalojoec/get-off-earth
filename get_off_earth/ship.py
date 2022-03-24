@@ -45,6 +45,22 @@ class ShipDAO:
         self.trip_danger = trip_danger # High, Medium, Low
 
 
+def to_ship(record): 
+        return Ship(
+                id = record[0], 
+                planet_id = record[1], 
+                planet_name = record[2],
+                distance = record[3],
+                ship_type_id = record[4],
+                ship_tye_model_name = record[5], 
+                max_capacity = record[6], 
+                name = record[7],
+                trip_time = record[8],
+                trip_danger = record[9],
+                passengers = record[10]
+        ).__dict__
+
+
 class ShipType:
     def __init__(self, 
                 id, 
@@ -57,28 +73,27 @@ class ShipType:
         self.max_capacity = max_capacity
 
 
-def to_ship(record): 
-        return ShipDAO(
-                record[0], 
-                record[1], 
-                record[2],
-                record[3],
-                record[4],
-                record[5]
-        ).__dict__
-
-
 def to_ship_type(record): 
         return ShipType(
-                record[0], 
-                record[1], 
-                record[2],
-                record[3]
+                id = record[0], 
+                model_name = record[1], 
+                hyperspeed_rating = record[2],
+                max_capacity = record[3]
         ).__dict__
 
 
 
 ship_controller = Blueprint('ship_controller', __name__)
+
+
+def select_all_ships_sql(where_statement):
+        return "SELECT t1.id, t1.planet_id, t2.name, t2.distance, t1.ship_type_id, " \
+                + "t3.model_name, t3.max_capacity, t1.name, t1.trip_time, t1.trip_danger, " \
+                + "SUM(t4.pod_quantity) passengers FROM ships t1 INNER JOIN planets t2 " \
+                + "ON t1.planet_id = t2.id INNER JOIN ship_types t3 ON t1.ship_type_id = t3.id " \
+                + f"INNER JOIN tickets t4 ON t1.id = t4.ship_id {where_statement} " \
+                + "GROUP BY t1.id, t2.name, t2.distance, " \
+                + "t3.model_name, t3.max_capacity ORDER BY t1.id ASC"
 
 
 @ship_controller.route('/ships', methods = ['GET', 'POST'])
@@ -89,7 +104,9 @@ def ships():
                 """
                 return json.dumps(list(map(
                                 to_ship, 
-                                select_from_db("SELECT * FROM ships")
+                                select_from_db(
+                                        select_all_ships_sql("")
+                                )
                         )))
         if request.method == 'POST':
                 """
@@ -120,7 +137,9 @@ def ship_by_id(id):
         """
         return json.dumps(
                         to_ship(
-                        select_from_db(f"SELECT * FROM ships WHERE id={id}")[0]
+                        select_from_db(
+                                select_all_ships_sql(f"WHERE t1.id = {id}")
+                        )[0]
         ))
 
 
