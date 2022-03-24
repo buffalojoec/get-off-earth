@@ -86,7 +86,7 @@ def tickets():
                                 select_from_db(
                                         select_all_tickets_sql("")
                                 )
-                        )))
+                        )), indent=4)
         if request.method == 'POST':
                 """
                 Buy a ticket to a ship. You're one of the lucky ones.
@@ -102,7 +102,7 @@ def tickets():
                         new_ticket.name,
                         new_ticket.pod_quantity
                 ))
-                return json.dumps(new_ticket.__dict__)
+                return json.dumps(new_ticket.__dict__, indent=4)
 
 
 @ticket_controller.route('/tickets/<id>')
@@ -110,9 +110,12 @@ def get_ticket_by_id(id):
         """
         Get a specific ticket by ID.
         """
-        return json.dumps(
-                        to_ticket(
-                        select_from_db(
-                                select_all_tickets_sql(f"WHERE t1.id = {id}")
-                        )[0]
-        ))
+        try:
+                return json.dumps(
+                                to_ticket(
+                                select_from_db(
+                                        select_all_tickets_sql(f"WHERE t1.id = {id}")
+                                )[0]
+                ), indent=4)
+        except IndexError:
+                return "Not found."

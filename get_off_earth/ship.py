@@ -107,7 +107,7 @@ def ships():
                                 select_from_db(
                                         select_all_ships_sql("")
                                 )
-                        )))
+                        )), indent=4)
         if request.method == 'POST':
                 """
                 Man your own ship. God speed.
@@ -127,7 +127,7 @@ def ships():
                         new_ship.trip_time,
                         new_ship.trip_danger
                 ))
-                return json.dumps(new_ship.__dict__)
+                return json.dumps(new_ship.__dict__, indent=4)
 
 
 @ship_controller.route('/ships/<id>')
@@ -135,12 +135,15 @@ def ship_by_id(id):
         """
         Get a specific ship by ID.
         """
-        return json.dumps(
-                        to_ship(
-                        select_from_db(
-                                select_all_ships_sql(f"WHERE t1.id = {id}")
-                        )[0]
-        ))
+        try:
+                return json.dumps(
+                                to_ship(
+                                select_from_db(
+                                        select_all_ships_sql(f"WHERE t1.id = {id}")
+                                )[0]
+                ), indent=4)
+        except IndexError:
+                return "Not found."
 
 
 @ship_controller.route('/shipTypes', methods = ['GET', 'POST'])
@@ -152,7 +155,7 @@ def ship_types():
                 return json.dumps(list(map(
                                 to_ship_type, 
                                 select_from_db("SELECT * FROM ship_types")
-                        )))
+                        )), indent=4)
         if request.method == 'POST':
                 """
                 Design a new ship type. I hope you know what you're doing.
@@ -168,4 +171,4 @@ def ship_types():
                         new_ship_type.hyperspeed_rating,
                         new_ship_type.max_capacity
                 ))
-                return json.dumps(new_ship_type.__dict__)
+                return json.dumps(new_ship_type.__dict__, indent=4)

@@ -62,7 +62,7 @@ def planets():
                                 select_from_db(
                                         select_all_planets_sql("")
                                 )
-                        )))
+                        )), indent=4)
         if request.method == 'POST':
                 """
                 Add a new planet to the navigation panel.
@@ -76,7 +76,7 @@ def planets():
                         new_planet.name, 
                         new_planet.distance
                         ))
-                return json.dumps(new_planet.__dict__)
+                return json.dumps(new_planet.__dict__, indent=4)
         
 
 @planet_controller.route('/planets/<id>')
@@ -84,9 +84,12 @@ def planet_by_id(id):
         """
         Get a specific planet by ID.
         """
-        return json.dumps(
-                        to_planet(
-                        select_from_db(
-                                select_all_planets_sql(f"WHERE t1.id = {id}")
-                        )[0]
-        ))
+        try:
+                return json.dumps(
+                                to_planet(
+                                select_from_db(
+                                        select_all_planets_sql(f"WHERE t1.id = {id}")
+                                )[0]
+                ), indent=4)
+        except IndexError:
+                return "Not found."
