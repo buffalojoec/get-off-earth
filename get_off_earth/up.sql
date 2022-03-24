@@ -33,39 +33,39 @@ CREATE TABLE IF NOT EXISTS tickets
 
 INSERT INTO planets
 (
-    id, name, distance
+    name, distance
 ) 
 VALUES
-    (1, 'Nibiru', 20),
-    (2, 'Kepler-22b', 500),
-    (3, 'Tatooine', 600),
-    (4, 'Nabu', 1200),
-    (5, 'Titan III', 2700);
+    ('Nibiru', 20),
+    ('Kepler-22b', 500),
+    ('Tatooine', 600),
+    ('Nabu', 1200),
+    ('Titan III', 2700);
 
 INSERT INTO ship_types
 (
-    id, model_name, hypserspeed_rating, max_capacity
+    model_name, hypserspeed_rating, max_capacity
 ) 
 VALUES
-    (1, 'Galactibus', 20, 500),
-    (2, 'Star-Glider', 50, 90),
-    (3, 'Pulson', 75, 25),
-    (4, 'Empirion', 100, 5);
+    ('Galactibus', 20, 500),
+    ('Star-Glider', 50, 90),
+    ('Pulson', 75, 25),
+    ('Empirion', 100, 5);
 
 INSERT INTO ships
 (
-    id, planet_id, ship_type_id, name, trip_time, trip_danger
+    planet_id, ship_type_id, name, trip_time, trip_danger
 ) 
 VALUES
-    (1, 1, 1, 'USS Exodus', 1, 'Low'),
-    (2, 1, 1, 'HMS Royal Beacon', 1, 'Low'),
-    (3, 1, 1, 'Great Chinese Voyage', 1, 'Low'),
-    (4, 2, 2, 'USS Empire', 10, 'Medium'),
-    (5, 2, 2, 'SpaceX SuperFalcon 9', 10, 'Medium'),
-    (6, 3, 2, 'Great Chinese Intrepid', 12, 'High'),
-    (7, 3, 3, 'SpaceX MachE II', 8, 'High'),
-    (8, 4, 3, 'Stratocaster', 12, 'High'),
-    (9, 5, 3, 'Benatar', 27, 'Medium');
+    (1, 1, 'USS Exodus', 1, 'Low'),
+    (1, 1, 'HMS Royal Beacon', 1, 'Low'),
+    (1, 1, 'Great Chinese Voyage', 1, 'Low'),
+    (2, 2, 'USS Empire', 10, 'Medium'),
+    (2, 2, 'SpaceX SuperFalcon 9', 10, 'Medium'),
+    (3, 2, 'Great Chinese Intrepid', 12, 'High'),
+    (3, 3, 'SpaceX MachE II', 8, 'High'),
+    (4, 3, 'Stratocaster', 12, 'High'),
+    (5, 3, 'Benatar', 27, 'Medium');
 
 INSERT INTO tickets
 (
