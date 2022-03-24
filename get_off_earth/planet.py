@@ -72,6 +72,9 @@ def planets():
                         request.json['name'],
                         request.json['distance']
                 )
+                print(new_planet.name)
+                print(new_planet.distance)
+                exit(0)
                 insert_one("planets", (
                         new_planet.name, 
                         new_planet.distance
